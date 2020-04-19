@@ -1,0 +1,49 @@
+<div class="container mt-4 mb-4">
+  <div class="card">
+    <div class="card-body ml-4 mr-4" *ngIf="showResult">
+      <div class="test-result ">
+        <div class="alert" role="alert"
+          [ngClass]="{'alert-success': stats.score >= exam.passingScore, 'alert-danger': stats.score < exam.passingScore}">
+          <h1 class="percent">{{stats.score | number}}%</h1>
+          <span>You got {{stats.succeded}} out of {{exam.questions.length}}</span>
+          <h2>{{ stats.score >= exam.passingScore ? 'Congratulations!' : 'Too bad!'}}</h2>
+        </div>
+      </div>
+      <div class="question-review">
+        <h4>Test Review</h4>
+        <hr>
+        <div class="row ml-4 mr-4 mb-4" *ngFor="let currentQuestion of exam.questions; index as i">
+          <div class="col-md-12">
+            <p class="question"><strong>{{currentQuestion.id}} - {{currentQuestion.title}}</strong></p>
+          </div>
+          <div class="col-md-12">
+            <pre>
+{{currentQuestion.snippet}}
+          </pre>
+          </div>
+          <div class="row selection">
+            <div class="col-md-12">
+              <div class="custom-control custom-radio mt-2" *ngFor="let op of currentQuestion.options; index as j">
+                <input type="radio" class="custom-control-input" id="{{currentQuestion.id + '' + op.id}}" disabled
+                  name="{{currentQuestion.id + '' + op.id}}" [value]="op.id">
+                <label class="custom-control-label" [ngClass]="{'alert-success': isValidAnswer(status.selections[i], op),
+                 'alert-danger': status.selections[i].optionId === op.id && !op.correct}"
+                  for="{{currentQuestion.id + '' + op.id}}">
+                  <strong>{{op.id}})- </strong>{{op.title}}</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-body ml-4 mr-4" *ngIf="!showResult">
+      <div class="alert alert-warning" style="text-align: center;">
+        <h1>{{message}}</h1>
+        <button class="btn btn-primary" [routerLink]="[redirectTo]">
+          {{buttonMessage}}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

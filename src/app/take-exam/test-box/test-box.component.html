@@ -1,0 +1,61 @@
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-body ml-4 mr-4">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-4">
+              <button class="btn btn-default float-left" (click)="previousQuestion()">Previos</button>
+            </div>
+            <div class="col-md-4" style="text-align: center;">
+              <div class="clock mr-4" style="display: inline-block;">
+                {{ exam.durationInMinutes }}
+              </div>
+              <div class="counter" style="display: inline-block;">
+                {{ counter }} of {{ exam.questions.length }}
+              </div>
+            </div>
+            <div class="col-md-4">
+              <button class="btn btn-outline-primary float-right" (click)="nextQuestion()">{{nextText}}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="row ml-4 mr-4 mb-4">
+        <div class="col-md-12">
+        <p class="question"><strong>{{ currentQuestion.title }}</strong></p>
+        </div>
+        <div class="col-md-12">
+          <pre>
+{{ currentQuestion.snippet }}
+          </pre>
+        </div>
+      </div>
+      <div class="row selection">
+        <div class="col-md-12">
+          <div class="custom-control custom-radio mt-2" *ngFor="let op of currentQuestion.options">
+          <input type="radio" class="custom-control-input" id="{{op.id}}" name="option" (click)="updateStatus(op.id)" [value]="op.id" [(ngModel)]="optionId">
+          <label class="custom-control-label" for="{{op.id}}">
+<strong>{{op.id}})- </strong><pre *ngIf="op.type === 'code'">{{op.title}}</pre>
+            <span *ngIf="op.type === 'text'">{{op.title}}</span>
+          </label>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="row">
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-6">
+                <button class="btn btn-default float-left" (click)="previousQuestion()">Previos</button>
+              </div>
+              <div class="col-md-6">
+                <button class="btn btn-outline-primary float-right" (click)="nextQuestion()">{{nextText}}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>

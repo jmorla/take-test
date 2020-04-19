@@ -1,0 +1,137 @@
+<div class="container mt-4 mb-4">
+  <div class="card" style="min-height: 600px;">
+    <div class="card-header">
+      <div class="row">
+        <div class="col-md-12">
+          <h2 class="float-left">Build Exam</h2>
+          <button class="btn btn-primary float-right" (click)="exportExam()">Export exam</button>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="examForm">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="title"><strong>Title:</strong></label>
+              <input id="title" type="text" class="form-control" formControlName="title">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="numberOfQuestions"><strong>Number of questions:</strong></label>
+              <input id="numberOfQuestions" type="number" class="form-control" [value]="questions.controls.length"
+                min="0" disabled>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="durationInMinutes"><strong>Duration In minutes</strong></label>
+              <input id="durationInMinutes" type="number" class="form-control" formControlName="durationInMinutes"
+                min="0">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="passingScore"><strong>Passing Score:</strong></label>
+              <input id="passingScore" type="number" class="form-control" formControlName="passingScore" min="0">
+            </div>
+          </div>
+        </div>
+        <div *ngFor="let question of questions.controls; index as i">
+          <hr>
+          <ng-container [formGroup]="question">
+            <div class="ml-4" style="border-left: solid 1px #dadada; padding-left: 15px;">
+              <div class="row">
+                <label class="col-md-6"><strong>Question #{{i + 1}}</strong></label>
+                <button class="btn btn-outline-danger" (click)="removeQuestion(i)">Remove</button>
+              </div>
+              <div class="row">
+                <div class="form-group col-md-6">
+                  <label for="title-question-{{i}}">Question</label>
+                  <input id="title-question-{{i}}" type="text" class="form-control"
+                    placeholder="ex. how many is 2 plus 2" formControlName="title">
+                </div>
+              </div>
+              <div class="row">
+                <div class="form-group col-md-6">
+                  <label for="type-question-{{i}}">Type</label>
+                  <select id="type-question-{{i}}" type="text" class="form-control" formControlName="type">
+                    <option value="multiple">Multiple</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class="form-group col-md-6">
+                  <div class="custom-control custom-switch">
+                    <input type="checkbox" class="custom-control-input" id="question-{{i}}-hasSnippet"
+                      formControlName="hasSnippet" checked="false">
+                    <label class="custom-control-label" for="question-{{i}}-hasSnippet">Has Snippet Code</label>
+                  </div>
+                </div>
+              </div>
+              <div class="row" *ngIf="question.get('hasSnippet').value">
+                <div class="form-group col-md-6">
+                  <label for="snippet-question-{{i}}">Snippet Code</label>
+                  <textarea id="snippet-question-{{i}}" class="form-control" formControlName="snippet"></textarea>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-6" style="border-left: solid 1px #dadada; padding-left: 25px;">
+                  <div *ngFor="let option of getOptions(question).controls; index as j">
+                    <ng-container [formGroup]="option">
+                      <div class="mt-2">
+                        <div class="row">
+                          <label class="col-md-6"><strong>Option #{{j + 1}}</strong></label>
+                          <button class="btn btn-outline-danger" (click)="removeOption(question, j)">Remove</button>
+                        </div>
+                        <div class="row">
+                          <div class="form-group">
+                            <label for="question-{{i}}-option-type-{{j}}">Title Format</label>
+                            <select id="question-{{i}}-option-type-{{j}}" type="text" class="form-control"
+                              formControlName="type">
+                              <option value="text">Text</option>
+                              <option value="code">Snippet Code</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="form-group">
+                            <label for="question-{{i}}-option-title-{{j}}">Title</label>
+                            <input id="question-{{i}}-option-title-{{j}}" type="text" class="form-control"
+                              formControlName="title" *ngIf="option.get('type').value && option.get('type').value !== 'code'"
+                              placeholder="ex. is quals to 4">
+                            <textarea id="question-{{i}}-option-title-{{j}}" class="form-control"
+                              formControlName="title" *ngIf="option.get('type').value === 'code'"
+                              placeholder="ex. is quals to 4"></textarea>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="form-group">
+                            <div class="custom-control custom-switch">
+                              <input type="checkbox" class="custom-control-input" formControlName="correct"
+                                id="question-{{i}}-option-correct-{{j}}">
+                              <label class="custom-control-label" for="question-{{i}}-option-correct-{{j}}">The option
+                                is a correct Answer</label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </ng-container>
+                    <hr>
+                  </div>
+                  <button class="btn btn-outline-success" (click)="addOption(question)">Add Option</button>
+                </div>
+              </div>
+            </div>
+            <hr>
+          </ng-container>
+        </div>
+      </form>
+      <div style="text-align: center;">
+        <button class="btn btn-outline-primary" (click)="addQuestion()">Add Question</button>
+      </div>
+    </div>
+  </div>
+</div>
